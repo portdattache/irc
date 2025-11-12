@@ -17,6 +17,7 @@ OBJ_DIR     = obj
 SRC         = \
 	srcs/Channel.cpp \
 	srcs/Client.cpp \
+	srcs/cmds/PassCmd.cpp \
 	srcs/cmds/InviteCmd.cpp \
 	srcs/cmds/JoinCmd.cpp \
 	srcs/cmds/KickCmd.cpp \
