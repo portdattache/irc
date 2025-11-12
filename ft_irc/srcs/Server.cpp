@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 20:20:23 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/11/12 10:19:21 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/11/12 14:35:21 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,25 @@
 #include "ft_irc.hpp"
 
 Server::Server(int port, const std::string &password) : _port(port),
-	_socket_fd(-1), _password(password)
+	_password(password)
 {
+	int			opt;
+	sockaddr_in	addr;
+
+	_serverFd = socket(AF_INET, SOCK_STREAM, 0);
+	if (_serverFd < 0)
+		throw std::runtime_error("Socket failed");
+	opt = 1;
+	if (setsockopt(_serverFd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0)
+		throw std::runtime_error("setsockopt failed");
+	std::memset(&addr, 0, sizeof(addr));
+	addr.sin_family = AF_INET;
+	addr.sin_addr.s_addr = INADDR_ANY;
+	addr.sin_port = htons(_port);
+	if (bind(_serverFd, (sockaddr *)&addr, sizeof(addr)) < 0)
+		throw std::runtime_error("Bind failed");
+	if (listen(_serverFd, 10) < 0)
+		throw std::runtime_error("Listen failed");
 }
 
 Server::Server(const Server &copy)
@@ -31,9 +48,8 @@ Server &Server::operator=(const Server &copy)
 	{
 		_channels = copy._channels;
 		_clients = copy._clients;
-		_pollfds = copy._pollfds;
 		_port = copy._port;
-		_socket_fd = copy._socket_fd;
+		_serverFd = copy._serverFd;
 		_password = copy._password;
 	}
 	return (*this);
@@ -41,107 +57,111 @@ Server &Server::operator=(const Server &copy)
 
 Server::~Server()
 {
-	if (_socket_fd != -1)
-		close(_socket_fd);
 	for (std::map<int,
 		Client *>::iterator it = _clients.begin(); it != _clients.end(); ++it)
 		delete (it->second);
 	for (std::map<std::string,
 		Channel *>::iterator it = _channels.begin(); it != _channels.end(); ++it)
 		delete (it->second);
+	if (_serverFd != -1)
+		close(_serverFd);
 }
+// ==================== SERVER* ==============================
 
 void Server::run()
 {
 	struct sockaddr_in	addr;
-	int					opt;
-	struct pollfd		serverPoll;
+	socklen_t			addrLen;
+	pollfd				serverPoll;
+	int					ret;
+	pollfd				clientPoll;
+	int					clientFd;
+	Client				*client;
+	char				buffer[512];
+	int					bytesRead;
 
-	opt = 1;
-	_socket_fd = socket(AF_INET, SOCK_STREAM, 0);
-	if (_socket_fd < 0)
-		throw std::runtime_error("Socket creation failed.");
-	if (setsockopt(_socket_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0)
-		throw std::runtime_error("Setsockopt failed");
-	fcntl(_socket_fd, F_SETFL, O_NONBLOCK);
-	std::memset(&addr, 0, sizeof(addr));
-	addr.sin_family = AF_INET;
-	addr.sin_addr.s_addr = INADDR_ANY;
-	addr.sin_port = htons(_port);
-	if (bind(_socket_fd, (struct sockaddr *)&addr, sizeof(addr)) < 0)
-		throw std::runtime_error("Bind failed");
-	if (listen(_socket_fd, 10) < 0)
-		throw std::runtime_error("Listen failed");
-	std::cout << "Server running on port: " << _port << std::endl;
-	serverPoll.fd = _socket_fd;
+	addrLen = sizeof(addr);
+	fcntl(_serverFd, F_SETFL, O_NONBLOCK);
+	std::vector<pollfd> pollfds;
+	serverPoll.fd = _serverFd;
 	serverPoll.events = POLLIN;
-	_pollfds.push_back(serverPoll);
-	while (1)
+	pollfds.push_back(serverPoll);
+	std::cout << "Server running on port " << _port << std::endl;
+	while (true)
 	{
-		if (poll(&_pollfds[0], _pollfds.size(), -1) < 0)
-			throw std::runtime_error("Poll failed");
-		for (size_t i = 0; i < _pollfds.size(); i++)
+		ret = poll(pollfds.data(), pollfds.size(), -1);
+		if (ret < 0)
 		{
-			if (_pollfds[i].revents & POLLIN)
+			throw std::runtime_error("Poll failed");
+			break ;
+		}
+		for (size_t i = 0; i < pollfds.size(); ++i)
+		{
+			if (!(pollfds[i].revents & POLLIN))
+				continue ;
+			if (pollfds[i].fd == _serverFd)
 			{
-				if (_pollfds[i].fd == _socket_fd)
-					acceptNewClient();
-				else
-					handleClientMessage(_pollfds[i].fd);
+				clientFd = accept(_serverFd, (struct sockaddr *)&addr,
+						&addrLen);
+				if (clientFd < 0)
+					continue ;
+				fcntl(clientFd, F_SETFL, O_NONBLOCK);
+				addClient(clientFd);
+				clientPoll.fd = clientFd;
+				clientPoll.events = POLLIN;
+				pollfds.push_back(clientPoll);
+				std::cout << "New client connected: FD= " << clientFd << std::endl;
+			}
+			else
+			{
+				clientFd = pollfds[i].fd;
+				client = _clients[clientFd];
+				if (client)
+					continue ;
+				bytesRead = recv(clientFd, buffer, sizeof(buffer) - 1, 0);
+				if (bytesRead <= 0)
+				{
+					std::cout << "Client disconnected: FD= " << clientFd << std::endl;
+					removeClient(clientFd);
+					pollfds.erase(pollfds.begin() + i);
+					--i;
+					continue ;
+				}
+				buffer[bytesRead] = '\0';
+				client->addToBuffer(std::string(buffer));
+				std::string cmd;
+				while (!(cmd = client->extractCommand()).empty())
+					handleClientMessage(clientFd, cmd);
 			}
 		}
 	}
 }
 
-void Server::acceptNewClient()
+int Server::getServerFd() const
 {
-	struct sockaddr_in	clientAddr;
-	socklen_t			clientLen;
-	int					clientFd;
-	struct pollfd		clientPoll;
-	Client				*newClient;
-
-	clientLen = sizeof(clientAddr);
-	clientFd = accept(_socket_fd, (struct sockaddr *)&clientAddr, &clientLen);
-	if (clientFd < 0)
-		return ;
-	fcntl(clientFd, F_SETFL, O_NONBLOCK);
-	clientPoll.fd = clientFd;
-	clientPoll.events = POLLIN;
-	_pollfds.push_back(clientPoll);
-	std::map<int, Client *> clients;
-	newClient = new Client(clientFd);
-	_clients.insert(std::make_pair(clientFd, newClient));
-	std::cout << "New client connected: " << clientFd << std::endl;
+	return (_serverFd);
 }
 
-// void Server::handleClientMessage(int clientFd)
-// {
-// 	char	buf[512];
-// 	ssize_t	bytes;
+// ================== CLIENT* ============================
 
-// 	bytes = recv(clientFd, buf, sizeof(buf) - 1, 0);
-// 	if (bytes <= 0)
-// 	{
-// 		std::cout << "Client disconnected: " << clientFd << std::endl;
-// 		close(clientFd);
-// 		for (std::vector<pollfd>::iterator it = _pollfds.begin(); it != _pollfds.end(); ++it)
-// 		{
-// 			if (it->fd == clientFd)
-// 			{
-// 				_pollfds.erase(it);
-// 				break ;
-// 			}
-// 		}
-// 		_clients.erase(clientFd);
-// 		return ;
-// 	}
-// 	buf[bytes] = '\0';
-// 	_clients[clientFd]->addToBuffer(buf);
-// 	std::string message;
-// 	while (!(message = _clients[clientFd]->extractCommand()).empty())
-// 		CommandHandler::handleCommand(*this, *(_clients[clientFd]), message);
-// }
+void Server::addClient(int fd)
+{
+	Client	*client;
+
+	client = new Client(fd);
+	_clients[fd] = client;
+}
+
+void Server::removeClient(int fd)
+{
+	std::map<int, Client *>::iterator it = _clients.find(fd);
+	if (it != _clients.end())
+		;
+	{
+		delete (it->second);
+		_clients.erase(it);
+	}
+}
 
 Client *Server::getClientByNick(const std::string &nickname)
 {
@@ -159,6 +179,8 @@ std::string Server::getName() const
 	return (_name);
 }
 
+// ================== CHANNEL* ============================
+
 Channel *Server::getChannel(const std::string &name)
 {
 	std::map<std::string, Channel *>::iterator it = _channels.find(name);
@@ -174,4 +196,16 @@ Channel *Server::createChannel(const std::string &name)
 	newChannel = new Channel(name);
 	_channels[name] = newChannel;
 	return (newChannel);
+}
+
+// =================== MESSAGES* =============================
+
+void Server::handleClientMessage(int clientFd, const std::string &message)
+{
+	Client	*client;
+
+	client = _clients[clientFd];
+	if (!client)
+		return ;
+	_cmdHandler.handle(*this, *client, message);
 }

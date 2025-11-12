@@ -24,14 +24,15 @@ SRC         = \
 	srcs/cmds/NickCmd.cpp \
 	srcs/cmds/PrivMsgCmd.cpp \
 	srcs/cmds/TopicCmd.cpp \
+	srcs/cmds/PingCmd.cpp \
 	srcs/cmds/UserCmd.cpp \
 	srcs/CommandHandler.cpp \
 	srcs/main.cpp \
 	srcs/Mode.cpp \
 	srcs/Server.cpp \
 	srcs/Topic.cpp \
-	srcs/Utils.cpp \
-	
+	srcs/Utils.cpp 
+
 OBJ         = $(SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 
 

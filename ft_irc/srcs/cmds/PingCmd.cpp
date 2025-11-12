@@ -1,26 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Utils.cpp                                          :+:      :+:    :+:   */
+/*   PingCmd.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/10 18:31:43 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/11/12 12:00:13 by bcaumont         ###   ########.fr       */
+/*   Created: 2025/11/12 14:37:53 by bcaumont          #+#    #+#             */
+/*   Updated: 2025/11/12 14:43:07 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "Channel.hpp"
 #include "Client.hpp"
+#include "Mode.hpp"
+#include "Server.hpp"
 #include "Utils.hpp"
 #include "ft_irc.hpp"
 
-void	sendError(Client &client, const std::string &code)
+void PingCmd::execute(Server &server, Client &client,
+	const std::vector<std::string> &args)
 {
-	client.sendMessage(":" + client.getNickname() + " " + code);
-}
-
-void	sendReply(Client &client, const std::string &code,
-		const std::string &msg)
-{
-	client.sendMessage(":" + client.getNickname() + " " + code + " " + msg);
+	(void)server;
+	(void)args;
+	client.sendMessage("PONG\r\n");
 }

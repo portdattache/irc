@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 21:29:42 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/11/12 10:33:20 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/11/12 13:01:18 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,7 @@ class CommandHandler
 	CommandHandler(const CommandHandler &copy);
 	CommandHandler &operator=(const CommandHandler &copy);
 	~CommandHandler();
-	void handle(Server &server, Client &client, const std::string &cmdName,
-		const std::vector<std::string> &args);
+	void handle(Server &server, Client &client, const std::string &args);
 	void registerCommand(const std::string &name, ICommand *cmd);
 };
 

@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 20:30:18 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/11/12 10:23:04 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/11/12 14:31:19 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,13 +106,12 @@ std::string Client::extractCommand()
 {
 	size_t	pos;
 
-	pos = _buffer.find("\n");
+	pos = _buffer.find("\r\n");
 	std::string cmd;
-	if (pos != std::string::npos)
-	{
-		cmd = _buffer.substr(0, pos);
-		_buffer.erase(0, pos + 1);
-	}
+	if (pos == std::string::npos)
+		return ("");
+	cmd = _buffer.substr(0, pos);
+	_buffer.erase(0, pos + 1);
 	return (cmd);
 }
 

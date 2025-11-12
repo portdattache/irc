@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 19:38:15 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/11/12 10:13:54 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/11/12 14:18:02 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@
 
 // ========== LIBRAIRIES STANDARD ==========
 # include <algorithm>
+# include <cstdlib>
+# include <cstring>
 # include <ctime>
 # include <iomanip>
 # include <iostream>

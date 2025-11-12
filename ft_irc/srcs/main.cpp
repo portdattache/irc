@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/07 10:11:16 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/11/12 10:56:15 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/11/12 14:32:49 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,13 @@ int	main(int argc, char **argv)
 	try
 	{
 		Server server(port, password);
+		std::cout << "IRC Server starting on port: " << port << std::endl;
 		server.run();
 	}
 	catch (std::exception &e)
 	{
 		std::cerr << "Error: " << e.what() << std::endl;
+		return (1);
 	}
 	return (0);
 }
