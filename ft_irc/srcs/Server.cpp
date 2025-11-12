@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 20:20:23 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/11/12 14:35:21 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/11/12 21:42:06 by broboeuf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,15 @@
 #include "Client.hpp"
 #include "Server.hpp"
 #include "ft_irc.hpp"
+#include "Utils.hpp"
 
-Server::Server(int port, const std::string &password) : _port(port),
+Server::Server(int port, const std::string &password) : 
+	_port(port),
 	_password(password)
 {
 	int			opt;
 	sockaddr_in	addr;
+	_name = "ircserv";
 
 	_serverFd = socket(AF_INET, SOCK_STREAM, 0);
 	if (_serverFd < 0)
@@ -116,7 +119,7 @@ void Server::run()
 			{
 				clientFd = pollfds[i].fd;
 				client = _clients[clientFd];
-				if (client)
+				if (!client)
 					continue ;
 				bytesRead = recv(clientFd, buffer, sizeof(buffer) - 1, 0);
 				if (bytesRead <= 0)
@@ -156,7 +159,6 @@ void Server::removeClient(int fd)
 {
 	std::map<int, Client *>::iterator it = _clients.find(fd);
 	if (it != _clients.end())
-		;
 	{
 		delete (it->second);
 		_clients.erase(it);
@@ -208,4 +210,27 @@ void Server::handleClientMessage(int clientFd, const std::string &message)
 	if (!client)
 		return ;
 	_cmdHandler.handle(*this, *client, message);
+}
+
+const std::string &Server::getPassword() const
+{
+    return (_password);
+}
+
+void Server::tryRegister(Client &client)
+{
+	if (client.isRegistered())
+		return;
+	if (!client.isPassOk())
+		return;
+	if (!client.hasNickname())
+		return;
+	if (client.getUsername().empty())
+		return;
+
+	client.setRegistered(true);
+	sendReply(*this, client, RPL_WELCOME, "", "Welcome to IRC " + client.toString());
+	sendReply(*this, client, RPL_YOURHOST, "", "Your host is " + getName());
+	sendReply(*this, client, RPL_CREATED, "", "This serwas created just now");
+	sendReply(*this, client, RPL_MYINFO, getName() + " ft_irc i t k o l", "");
 }

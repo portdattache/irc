@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ModeCmd.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/11 09:41:02 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/11/12 10:42:15 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/11/12 18:38:12 by broboeuf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ void ModeCmd::execute(Server &server, Client &client,
 			}
 			else
 				chan->getMode().clearLimit();
+			break;
 		case 'o':
 		{
 			if (argIndex >= args.size())

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   JoinCmd.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/11 08:36:51 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/11/12 10:53:28 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/11/12 21:48:14 by broboeuf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ void JoinCmd::execute(Server &server, Client &client,
 	Channel	*chan;
 
 	if (args.empty())
-		return (sendError(client, ERR_NEEDMOREPARAMS));
+return sendError(server, client, ERR_NEEDMOREPARAMS, "JOIN", "Not enough parameters");
+
 	std::string chanName = args[0];
 	chan = server.getChannel(chanName);
 	if (!chan)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandHandler.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 17:48:23 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/11/12 13:15:29 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/11/12 21:33:26 by broboeuf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ CommandHandler::CommandHandler()
 	registerCommand("NICK", new NickCmd());
 	registerCommand("PING", new PingCmd());
 	registerCommand("USER", new UserCmd());
+	registerCommand("PASS", new PassCmd());
 }
 
 CommandHandler::CommandHandler(const CommandHandler &copy)

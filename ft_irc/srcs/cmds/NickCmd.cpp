@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   NickCmd.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/11 10:22:54 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/11/12 10:42:52 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/11/12 21:42:12 by broboeuf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,5 @@ void NickCmd::execute(Server &server, Client &client,
 	if (server.getClientByNick(newNick))
 		return (client.sendMessage(ERR_NICKNAMEINUSE));
 	client.setNickname(newNick);
-	if (client.hasNickname() && !client.isRegistered())
-		client.Registered();
+	server.tryRegister(client);
 }

@@ -1,25 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Utils.hpp                                          :+:      :+:    :+:   */
+/*   PassCmd.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/10 18:29:22 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/11/12 21:28:18 by broboeuf         ###   ########.fr       */
+/*   Created: 2025/11/12 21:29:33 by broboeuf          #+#    #+#             */
+/*   Updated: 2025/11/12 21:30:14 by broboeuf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef UTILS_HPP
-# define UTILS_HPP
+#ifndef PASSCMD_HPP
+#define PASSCMD_HPP
+#include "ICommand.hpp"
 
-# include "ft_irc.hpp"
-
-class	Client;
-
-void sendError(Server &server, Client &client, const std::string &code,
-			   const std::string &params, const std::string &text);
-void sendReply(Server &server, Client &client, const std::string &code,
-			   const std::string &params, const std::string &text);
+class PassCmd : public ICommand {
+public:
+	virtual void execute(Server &server, Client &client,
+						 const std::vector<std::string> &args);
+};
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 20:28:29 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/11/12 10:14:38 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/11/12 21:20:31 by broboeuf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ class Client
   private:
 	int _fd;
 	bool _registered;
+	bool _passOk;
 	std::string _nickname;
 	std::string _username;
 	std::string _buffer;
@@ -33,6 +34,8 @@ class Client
 	~Client();
 
 	// Public Client Methods //
+	bool isPassOk() const;
+	void setPassOk(bool v);
 	int getFd() const;
 	bool isRegistered() const;
 	void setNickname(const std::string &nick);

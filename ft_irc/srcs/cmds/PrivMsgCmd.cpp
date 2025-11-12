@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PrivMsgCmd.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 19:35:59 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/11/12 10:43:15 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/11/12 21:53:02 by broboeuf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,15 @@ void PrivMsgCmd::execute(Server &server, Client &client,
 	Client	*to;
 
 	if (args.size() < 2)
-		return (sendError(client, ERR_NEEDMOREPARAMS));
+		return sendError(server, client, ERR_NEEDMOREPARAMS, "PRIVMSG", "Not enough parameters");
+
 	std::string target = args[0];
 	std::string message = args[1];
 	if (target[0] == '#')
 	{
 		chan = server.getChannel(target);
 		if (!chan)
-			return (sendError(client, ERR_NOSUCHCHANNEL));
+			return sendError(server, client, ERR_NOSUCHCHANNEL, args[0], "No such channel");
 		chan->broadcast(":" + client.getNickname() + " PRIVMSG " + target + " :"
 			+ message);
 	}
@@ -39,7 +40,7 @@ void PrivMsgCmd::execute(Server &server, Client &client,
 	{
 		to = server.getClientByNick(target);
 		if (!to)
-			return (sendError(client, ERR_NOSUCHNICK));
+			return sendError(server, client, ERR_NOSUCHNICK, args[0], "No such nick");
 		to->sendMessage(":" + client.getNickname() + " PRIVMSG " + target + " :"
 			+ message);
 	}

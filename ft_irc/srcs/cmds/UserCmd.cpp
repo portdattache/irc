@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   UserCmd.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/11 10:41:46 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/11/12 10:43:41 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/11/12 21:42:08 by broboeuf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,5 @@ void UserCmd::execute(Server &server, Client &client,
 	if (args.size() < 2)
 		return (client.sendMessage(ERR_NEEDMOREPARAMS));
 	client.setUsername(args[0]);
-	if (client.hasNickname() && !client.isRegistered())
-		client.Registered();
+	server.tryRegister(client);
 }

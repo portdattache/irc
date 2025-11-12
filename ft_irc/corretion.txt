@@ -1,0 +1,45 @@
+if (!client) au lieu de if (client)			Le serveur lisait dans des clients inexistants → empêchait toute lecture
+
+removeClient() sans ;						Supprimait parfois le mauvais client ou causait des segfault
+
+extractCommand() → pos + 2					Corrige la reconstruction des lignes IRC (\r\n)
+
+_topic initialisé dans Channel				Évite un segfault dès qu’un topic est accédé
+
+MSG_NOSIGNAL dans send()					Empêche un SIGPIPE (crash quand un client quitte)
+
+break; ajouté dans ModeCmd					Corrige une erreur logique (case 'l' tombait sur 'o')
+
+getPassword() / isPassOk() / setPassOk()	Ajout des accès et gestion d’état d’authentification
+
+tryRegister()								Enregistre automatiquement un client quand PASS+NICK+USER sont validés
+
+
+
+correction protocole irc
+
+
+Préfixe serveur ircserv								Obligatoire pour tous les messages IRC (:<servername> …)
+
+Refonte sendError() / sendReply()					Formate les numéros (ex: :ircserv 403 nick #chan :No such channel)
+
+PING → PONG correct									Réponse conforme à la RFC (sinon les clients se déconnectent)
+
+RPL_WELCOME / RPL_YOURHOST / etc.					Messages envoyés à la connexion comme un vrai serveur
+
+Changement de signature sendError à 5 arguments		Permet d’afficher les codes, la commande, et le texte lisible
+
+Corrections dans JOIN, PRIVMSG, etc.				Chaque erreur est maintenant formatée RFC-complian
+
+
+
+correction authentification
+
+
+Ajout de PASS commande							Vérifie le mot de passe fourni par le client
+
+Ajout de _passOk								Sauvegarde l’état du mot de passe validé
+
+tryRegister()									Vérifie PASS, NICK, USER avant de “connecter” officiellement
+
+Envoi automatique des messages 001–004			Comportement identique à un vrai serveur IRC

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 20:30:18 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/11/12 14:31:19 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/11/12 21:17:18 by broboeuf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,11 @@
 #include "Client.hpp"
 #include "ft_irc.hpp"
 
-Client::Client(int fd) : _fd(fd), _registered(false)
-{
-}
+Client::Client(int fd) : 
+	_fd(fd), 
+	_registered(false),
+	_passOk(false)
+{}
 
 Client::Client(const Client &copy)
 {
@@ -95,6 +97,16 @@ void Client::Registered()
 	_registered = true;
 }
 
+bool Client::isPassOk() const
+{
+	return (_passOk);
+}
+
+void Client::setPassOk(bool v)
+{
+	_passOk = v;
+}
+
 std::string Client::toString() const
 {
 	return (_nickname + " (" + _username + ")");
@@ -111,12 +123,12 @@ std::string Client::extractCommand()
 	if (pos == std::string::npos)
 		return ("");
 	cmd = _buffer.substr(0, pos);
-	_buffer.erase(0, pos + 1);
+	_buffer.erase(0, pos + 2);
 	return (cmd);
 }
 
 void Client::sendMessage(const std::string &msg)
 {
 	std::string formatted = msg + "\r\n";
-	send(_fd, formatted.c_str(), formatted.size(), 0);
+	send(_fd, formatted.c_str(), formatted.size(), MSG_NOSIGNAL);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_irc.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 19:38:15 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/11/12 14:18:02 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/11/12 21:32:38 by broboeuf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,5 +96,6 @@ class	ICommand;
 # include "cmds/PrivMsgCmd.hpp"
 # include "cmds/TopicCmd.hpp"
 # include "cmds/UserCmd.hpp"
+# include "cmds/PassCmd.hpp"
 
 #endif

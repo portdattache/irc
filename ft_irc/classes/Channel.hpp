@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 20:33:13 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/11/12 10:15:08 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/11/12 21:45:32 by broboeuf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ class Channel
 	std::string _key;
 	std::vector<Client *> _members;
 	std::vector<Client *> _operators;
-	Topic *_topic;
 	Mode *_mode;
+	Topic *_topic;
 
   public:
 	Channel(const std::string &name);

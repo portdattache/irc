@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 21:51:12 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/11/12 10:21:49 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/11/12 18:48:32 by broboeuf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,11 @@
 #include "Mode.hpp"
 #include "Topic.hpp"
 
-Channel::Channel(const std::string &name) : _name(name), _mode(new Mode())
-{
-}
+Channel::Channel(const std::string &name) : 
+	_name(name), 
+	_mode(new Mode()),
+	_topic(new Topic())
+{}
 
 Channel::Channel(const Channel &copy)
 {
@@ -30,6 +32,10 @@ Channel &Channel::operator=(const Channel &copy)
 	{
 		_name = copy._name;
 		_members = copy._members;
+		if (_mode) delete _mode;
+		if (_topic) delete _topic;
+		_mode = new Mode(*copy._mode);
+		_topic = new Topic(*copy._topic);
 	}
 	return (*this);
 }
@@ -37,6 +43,7 @@ Channel &Channel::operator=(const Channel &copy)
 Channel::~Channel()
 {
 	delete (_mode);
+	delete (_topic);
 }
 
 // GETTER //

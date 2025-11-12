@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 19:19:01 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/11/12 12:50:01 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/11/12 21:40:15 by broboeuf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,10 @@ class Server
 
 	// === MESSAGES GESTION === //
 	void handleClientMessage(int clientFd, const std::string &message);
+	void tryRegister(Client &client);
 	int getServerFd() const;
+	const std::string &getPassword() const;
 };
 
 #endif
+
