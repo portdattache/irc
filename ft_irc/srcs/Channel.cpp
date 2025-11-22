@@ -6,7 +6,7 @@
 /*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 21:51:12 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/11/12 18:48:32 by broboeuf         ###   ########.fr       */
+/*   Updated: 2025/11/20 15:37:51 by broboeuf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,15 @@ void Channel::removeOperator(Client *client)
 			return ;
 		}
 	}
+}
+bool Channel::isMember(const Client &client) const
+{
+	for (size_t i = 0; i < _members.size(); i++)
+	{
+		if (_members[i] == &client)
+			return true;
+	}
+	return false;
 }
 
 Mode &Channel::getMode()

@@ -6,12 +6,12 @@
 /*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 20:30:18 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/11/12 21:17:18 by broboeuf         ###   ########.fr       */
+/*   Updated: 2025/11/21 10:41:36 by broboeuf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Channel.hpp"
 #include "Client.hpp"
+#include "Channel.hpp"
 #include "ft_irc.hpp"
 
 Client::Client(int fd) : 

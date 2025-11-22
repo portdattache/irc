@@ -6,7 +6,7 @@
 /*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 19:38:15 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/11/12 21:32:38 by broboeuf         ###   ########.fr       */
+/*   Updated: 2025/11/21 10:34:09 by broboeuf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # define ERR_USERNOTINCHANNEL "441"  // User not in channel
 # define ERR_NOTONCHANNEL "442"      // You're not on that channel
 # define ERR_USERONCHANNEL "443"     // User already on channel
+# define ERR_NOTREGISTERED "451"
 # define ERR_NEEDMOREPARAMS "461"    // Not enough parameters
 # define ERR_ALREADYREGISTERED "462" // Already registered
 # define ERR_PASSWDMISMATCH "464"    // Password incorrect
@@ -46,6 +47,7 @@
 # define RPL_ENDOFNAMES "366"
 # define RPL_INVITING "341"
 # define RPL_ENDOFWHO "315"
+# define RPL_CHANNELMODEIS "324"
 
 // ========== LIBRAIRIES STANDARD ==========
 # include <algorithm>
@@ -76,26 +78,5 @@
 
 class	ICommand;
 
-// ========== INCLUDES DU PROJET ==========
-// # include "Channel.hpp" //Gestion des channels
-// # include "Client.hpp" // Gestion du ou des clients
-// # include "CommandHandler.hpp" // Routeur des commandes
-// # include "ICommand.hpp" // Interface des commandes
-// # include "Mode.hpp" // Gestion des modes
-// # include "Server.hpp" // Gestion du server
-// # include "Topic.hpp" // Gestion des topics
-// # include "Utils.hpp" // Error replies &  Utils
-
-// ========== INCLUDES DES COMMANDES ======
-# include "cmds/InviteCmd.hpp"
-# include "cmds/JoinCmd.hpp"
-# include "cmds/KickCmd.hpp"
-# include "cmds/ModeCmd.hpp"
-# include "cmds/NickCmd.hpp"
-# include "cmds/PingCmd.hpp"
-# include "cmds/PrivMsgCmd.hpp"
-# include "cmds/TopicCmd.hpp"
-# include "cmds/UserCmd.hpp"
-# include "cmds/PassCmd.hpp"
 
 #endif

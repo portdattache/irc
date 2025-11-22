@@ -6,10 +6,11 @@
 /*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 14:37:53 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/11/12 21:25:44 by broboeuf         ###   ########.fr       */
+/*   Updated: 2025/11/20 21:02:38 by broboeuf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "PingCmd.hpp"
 #include "Channel.hpp"
 #include "Client.hpp"
 #include "Mode.hpp"
@@ -20,6 +21,12 @@
 void PingCmd::execute(Server &server, Client &client,
 	const std::vector<std::string> &args)
 {
-	const std::string token = args.empty() ? server.getName() : args[0];
-	client.sendMessage(":" + server.getName() + " PONG " + server.getName() + " :" + token);
+	std::string token;
+
+	if (!args.empty())
+		token = args[0];
+	else
+		token = server.getName();
+	client.sendMessage(":" + server.getName() + " PONG " + 
+		server.getName() + " :" + token);
 }

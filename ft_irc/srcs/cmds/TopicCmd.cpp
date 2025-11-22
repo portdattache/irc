@@ -3,37 +3,53 @@
 /*                                                        :::      ::::::::   */
 /*   TopicCmd.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/11 09:56:12 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/11/12 10:43:33 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/11/20 18:09:15 by broboeuf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "TopicCmd.hpp"
 #include "Channel.hpp"
 #include "Client.hpp"
 #include "Mode.hpp"
 #include "Server.hpp"
+#include "Utils.hpp"
 #include "Topic.hpp"
 #include "ft_irc.hpp"
 
 void TopicCmd::execute(Server &server, Client &client,
 	const std::vector<std::string> &args)
 {
-	Channel	*chan;
+	if (!client.isRegistered())
+		return sendError(server, client, ERR_NOTONCHANNEL, "TOPIC", 
+			"You have not registered");
 
 	if (args.empty())
-		return (client.sendMessage(ERR_NEEDMOREPARAMS));
-	const std::string channel = args[0];
-	chan = server.getChannel(channel);
+		return sendError(server, client, ERR_NEEDMOREPARAMS, "TOPIC", 
+			"Not enough parameters");
+	
+	const std::string channelName = args[0];
+	Channel *chan = server.getChannel(channelName);
 	if (!chan)
-		return (client.sendMessage(ERR_NOSUCHCHANNEL));
+		return sendError(server, client, ERR_NOSUCHCHANNEL, channelName, 
+			"No such channel");
 	if (args.size() == 1)
-		return (client.sendMessage(":" + server.getName() + " 332 "
-				+ client.getNickname() + " " + channel + " :"
-				+ chan->getTopic().getTopic()));
-	const std::string newTopic = args[1];
+	{
+		const std::string &topic = chan->getTopic().getTopic();
+		if (topic.empty())
+			return sendReply(server, client, RPL_NOTOPIC, channelName, "");
+		else
+			return sendReply(server, client, RPL_TOPIC, channelName, topic);
+	}
+	std::string newTopic = args[1];
+	if (!newTopic.empty() && newTopic[0] == ':')
+		newTopic = newTopic.substr(1);
+	
 	chan->getTopic().setTopic(newTopic, client.getNickname());
-	chan->broadcast(":" + client.getNickname() + " TOPIC " + channel + " :"
-		+ newTopic);
+	std::string msg = ":" + client.getNickname() + " TOPIC " + 
+		channelName + " :" + newTopic;
+	chan->broadcast(msg); 
 }
+

@@ -1,31 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ICommand.hpp                                       :+:      :+:    :+:   */
+/*   CapCmd.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/10 16:51:25 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/11/20 20:58:41 by broboeuf         ###   ########.fr       */
+/*   Created: 2025/11/20 16:38:44 by broboeuf          #+#    #+#             */
+/*   Updated: 2025/11/20 16:42:22 by broboeuf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ICOMMAND_HPP
-#define ICOMMAND_HPP
+#include "CapCmd.hpp"
+#include "Client.hpp"
 
-#include <string>
-#include <vector>
-
-class Server;
-class Client;
-
-class ICommand
+void CapCmd::execute(Server &server, Client &client, 
+                const std::vector<std::string> &args)
 {
-public:
-    virtual ~ICommand() {}
-    virtual void execute(Server &server,
-                         Client &client,
-                         const std::vector<std::string> &args) = 0;
-};
-
-#endif
+    (void)server;
+    (void)args;
+    client.sendMessage("CAP * ACK :\r\n");
+}

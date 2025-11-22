@@ -3,36 +3,52 @@
 /*                                                        :::      ::::::::   */
 /*   KickCmd.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/11 09:31:57 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/11/12 10:40:11 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/11/20 20:52:31 by broboeuf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "KickCmd.hpp"
+#include "Server.hpp"
 #include "Channel.hpp"
 #include "Client.hpp"
 #include "Mode.hpp"
-#include "Server.hpp"
+#include "Utils.hpp"
 #include "ft_irc.hpp"
 
 void KickCmd::execute(Server &server, Client &client,
-	const std::vector<std::string> &args)
+                      const std::vector<std::string> &args)
 {
-	Channel	*chan;
-	Client	*victim;
+    if (!client.isRegistered())
+        return sendError(server, client, ERR_NOTONCHANNEL, "KICK",
+                         "You have not registered");
 
-	if (args.size() < 2)
-		return (client.sendMessage(ERR_NEEDMOREPARAMS));
-	const std::string channel = args[0];
-	const std::string target = args[1];
-	chan = server.getChannel(channel);
-	if (!chan)
-		return (client.sendMessage(ERR_NOSUCHCHANNEL));
-	victim = server.getClientByNick(target);
-	if (!victim)
-		return (client.sendMessage(ERR_NOSUCHNICK));
-	chan->broadcast(":" + client.getNickname() + " KICK " + channel + " "
-		+ target);
-	chan->removeMember(victim);
+    if (args.size() < 2)
+        return sendError(server, client, ERR_NEEDMOREPARAMS, "KICK",
+                         "Not enough parameters");
+
+    const std::string channelName = args[0];
+    const std::string targetNick = args[1];
+
+    Channel *chan = server.getChannel(channelName);
+    if (!chan)
+        return sendError(server, client, ERR_NOSUCHCHANNEL, channelName,
+                         "No such channel");
+
+    if (!chan->isOperator(client))
+        return sendError(server, client, ERR_CHANOPRIVSNEEDED, channelName,
+                         "You're not channel operator");
+
+    Client *victim = server.getClientByNick(targetNick);
+    if (!victim)
+        return sendError(server, client, ERR_NOSUCHNICK, targetNick,
+                         "No such nick");
+
+    std::string msg = ":" + client.getNickname() + " KICK " +
+                      channelName + " " + targetNick;
+
+    chan->broadcast(msg);
+    chan->removeMember(victim);
 }

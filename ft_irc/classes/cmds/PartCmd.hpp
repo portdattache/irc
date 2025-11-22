@@ -1,31 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ICommand.hpp                                       :+:      :+:    :+:   */
+/*   PartCmd.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/10 16:51:25 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/11/20 20:58:41 by broboeuf         ###   ########.fr       */
+/*   Created: 2025/11/20 14:18:46 by broboeuf          #+#    #+#             */
+/*   Updated: 2025/11/20 14:22:20 by broboeuf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ICOMMAND_HPP
-#define ICOMMAND_HPP
+#ifndef PARTCMD_HPP
+#define PARTCMD_HPP
 
-#include <string>
-#include <vector>
+#include "ICommand.hpp"
 
-class Server;
-class Client;
-
-class ICommand
+class PartCmd : public ICommand
 {
-public:
-    virtual ~ICommand() {}
-    virtual void execute(Server &server,
-                         Client &client,
-                         const std::vector<std::string> &args) = 0;
+    virtual void execute(Server &serveur, Client &client,
+        const std::vector<std::string> &args);
 };
 
 #endif

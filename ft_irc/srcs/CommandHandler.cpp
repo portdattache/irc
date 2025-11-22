@@ -6,29 +6,45 @@
 /*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 17:48:23 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/11/12 21:33:26 by broboeuf         ###   ########.fr       */
+/*   Updated: 2025/11/20 21:25:52 by broboeuf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Client.hpp"
 #include "CommandHandler.hpp"
-#include "ICommand.hpp"
-#include "Utils.hpp"
-#include "ft_irc.hpp"
+#include "PassCmd.hpp"
+#include "NickCmd.hpp"
+#include "UserCmd.hpp"
+#include "PingCmd.hpp"
+#include "JoinCmd.hpp"
+#include "PartCmd.hpp"
+#include "PrivMsgCmd.hpp"
+#include "KickCmd.hpp"
+#include "InviteCmd.hpp"
+#include "ModeCmd.hpp"
+#include "TopicCmd.hpp"
+#include "QuitCmd.hpp"
+#include "CapCmd.hpp"
+
+#include "Client.hpp"
+#include "Server.hpp"
 
 CommandHandler::CommandHandler()
 {
-	registerCommand("JOIN", new JoinCmd());
-	registerCommand("PRIVMSG", new PrivMsgCmd());
-	registerCommand("KICK", new KickCmd());
-	registerCommand("TOPIC", new TopicCmd());
-	registerCommand("MODE", new ModeCmd());
-	registerCommand("INVITE", new InviteCmd());
-	registerCommand("NICK", new NickCmd());
-	registerCommand("PING", new PingCmd());
-	registerCommand("USER", new UserCmd());
-	registerCommand("PASS", new PassCmd());
+    registerCommand("PASS", new PassCmd());
+    registerCommand("NICK", new NickCmd());
+    registerCommand("USER", new UserCmd());
+    registerCommand("PING", new PingCmd());
+    registerCommand("JOIN", new JoinCmd());
+    registerCommand("PRIVMSG", new PrivMsgCmd());
+    registerCommand("KICK", new KickCmd());
+    registerCommand("INVITE", new InviteCmd());
+    registerCommand("MODE", new ModeCmd());
+    registerCommand("TOPIC", new TopicCmd());
+    registerCommand("PART", new PartCmd());
+    registerCommand("QUIT", new QuitCmd());
+    registerCommand("CAP", new CapCmd());
 }
+
 
 CommandHandler::CommandHandler(const CommandHandler &copy)
 {

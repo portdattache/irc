@@ -28,6 +28,9 @@ SRC         = \
 	srcs/cmds/PingCmd.cpp \
 	srcs/cmds/UserCmd.cpp \
 	srcs/CommandHandler.cpp \
+	srcs/cmds/PartCmd.cpp \
+	srcs/cmds/QuitCmd.cpp \
+	srcs/cmds/CapCmd.cpp \
 	srcs/main.cpp \
 	srcs/Mode.cpp \
 	srcs/Server.cpp \

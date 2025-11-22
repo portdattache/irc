@@ -6,7 +6,7 @@
 /*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 20:33:13 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/11/12 21:45:32 by broboeuf         ###   ########.fr       */
+/*   Updated: 2025/11/20 15:32:27 by broboeuf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ class Channel
 	void broadcastTopicChanged(const Client &client);
 	Topic &getTopic();
 	bool isOperator(const Client &client) const;
+	bool isMember(const Client &client) const;
 	Mode &getMode();
 };
 

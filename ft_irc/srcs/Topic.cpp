@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   Topic.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 10:41:11 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/11/12 10:22:23 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/11/20 21:03:57 by broboeuf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Client.hpp"
 #include "Topic.hpp"
+#include "Client.hpp"
 #include "ft_irc.hpp"
 
 Topic::Topic() : _topic(""), _author(""), _timestamp(0)

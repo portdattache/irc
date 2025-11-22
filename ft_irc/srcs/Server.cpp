@@ -6,13 +6,13 @@
 /*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 20:20:23 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/11/12 21:42:06 by broboeuf         ###   ########.fr       */
+/*   Updated: 2025/11/20 21:03:47 by broboeuf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "Server.hpp"
 #include "Channel.hpp"
 #include "Client.hpp"
-#include "Server.hpp"
 #include "ft_irc.hpp"
 #include "Utils.hpp"
 
@@ -198,6 +198,10 @@ Channel *Server::createChannel(const std::string &name)
 	newChannel = new Channel(name);
 	_channels[name] = newChannel;
 	return (newChannel);
+}
+const std::map<std::string, Channel*>& Server::getChannels() const
+{
+    return _channels;
 }
 
 // =================== MESSAGES* =============================
