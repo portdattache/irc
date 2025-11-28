@@ -3,22 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 20:30:18 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/11/21 10:41:36 by broboeuf         ###   ########.fr       */
+/*   Updated: 2025/11/27 20:29:11 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Client.hpp"
 #include "Channel.hpp"
+#include "Client.hpp"
 #include "ft_irc.hpp"
 
-Client::Client(int fd) : 
-	_fd(fd), 
-	_registered(false),
-	_passOk(false)
-{}
+Client::Client(int fd) : _fd(fd), _registered(false), _passOk(false)
+{
+}
 
 Client::Client(const Client &copy)
 {

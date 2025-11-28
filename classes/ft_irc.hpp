@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_irc.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 19:38:15 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/11/21 10:34:09 by broboeuf         ###   ########.fr       */
+/*   Updated: 2025/11/27 23:42:48 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,18 @@
 
 // ========== CODE ERROR DEFINES ===========
 
-# define ERR_NOSUCHNICK "401"        // No such nick/channel
-# define ERR_NOSUCHCHANNEL "403"     // No such channel
-# define ERR_CANNOTSENDTOCHAN "404"  // Cannot send to channel
-# define ERR_UNKNOWNCOMMAND "421"    // Unknown command
-# define ERR_UNKNOWNMODE "477"       // Unknown mode
-# define ERR_NONICKNAMEGIVEN "431"   // No nickname given
-# define ERR_ERRONEUSNICKNAME "432"  // Erroneous nickname
-# define ERR_NICKNAMEINUSE "433"     // Nickname in use
-# define ERR_USERNOTINCHANNEL "441"  // User not in channel
-# define ERR_NOTONCHANNEL "442"      // You're not on that channel
-# define ERR_USERONCHANNEL "443"     // User already on channel
+# define ERR_NOSUCHNICK "401"       // No such nick/channel
+# define ERR_NOSUCHCHANNEL "403"    // No such channel
+# define ERR_CANNOTSENDTOCHAN "404" // Cannot send to channel
+# define ERR_NOTEXTTOSEND "412"     // Not text to send
+# define ERR_UNKNOWNCOMMAND "421"   // Unknown command
+# define ERR_UNKNOWNMODE "477"      // Unknown mode
+# define ERR_NONICKNAMEGIVEN "431"  // No nickname given
+# define ERR_ERRONEUSNICKNAME "432" // Erroneous nickname
+# define ERR_NICKNAMEINUSE "433"    // Nickname in use
+# define ERR_USERNOTINCHANNEL "441" // User not in channel
+# define ERR_NOTONCHANNEL "442"     // You're not on that channel
+# define ERR_USERONCHANNEL "443"    // User already on channel
 # define ERR_NOTREGISTERED "451"
 # define ERR_NEEDMOREPARAMS "461"    // Not enough parameters
 # define ERR_ALREADYREGISTERED "462" // Already registered
@@ -34,6 +35,7 @@
 # define ERR_INVITEONLYCHAN "473"    // Cannot join invite-only channel
 # define ERR_CHANNELISFULL "471"     // Channel is full
 # define ERR_KEYSET "467"            // Channel key already set
+# define ERR_BADCHANNELKEY "475"     // Bad channel key
 
 // ========== REPLIES CODE DEFINES =========
 
@@ -77,6 +79,5 @@
 // ========== Interface ===================
 
 class	ICommand;
-
 
 #endif

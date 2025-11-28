@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 12:09:25 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/11/12 10:16:10 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/11/27 23:38:41 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ class Mode
 	bool isInviteOnly() const;
 	bool isTopicLocked() const;
 	bool checkKey(const std::string &key) const;
+	bool hasKey() const;
 	bool hasLimit() const;
 	size_t getLimit() const;
 	void setInvinteOnly(bool mode);
@@ -44,7 +45,6 @@ class Mode
 	void setLimit(size_t limit);
 	void clearLimit();
 	void clearKey();
-	void apply(const std::string &modeFlags, Client *client);
 	std::string getModeString() const;
 };
 

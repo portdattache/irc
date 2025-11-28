@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 20:33:13 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/11/20 15:32:27 by broboeuf         ###   ########.fr       */
+/*   Updated: 2025/11/27 22:59:05 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,9 @@ class Channel
   private:
 	std::string _name;
 	std::string _key;
-	std::vector<Client *> _members;
-	std::vector<Client *> _operators;
+	std::set<Client *> _members;
+	std::set<Client *> _operators;
+	std::set<Client *> _invited;
 	Mode *_mode;
 	Topic *_topic;
 
@@ -37,15 +38,19 @@ class Channel
 
 	// CHANNEL PUBLIC METHODS //
 	const std::string &getName() const;
+	const std::set<Client *> &getMembers() const;
 	void addMember(Client *client);
 	void removeMember(Client *client);
 	void addOperator(Client *client);
 	void removeOperator(Client *client);
 	void broadcast(const std::string &message);
-	void broadcastTopicChanged(const Client &client);
-	Topic &getTopic();
 	bool isOperator(const Client &client) const;
 	bool isMember(const Client &client) const;
+	bool isInvited(const Client &client) const;
+	bool addInvitation(Client *client);
+	void removeInvitation(Client *client);
+	size_t getMemberCount() const;
+	Topic &getTopic();
 	Mode &getMode();
 };
 

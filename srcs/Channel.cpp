@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 21:51:12 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/11/20 15:37:51 by broboeuf         ###   ########.fr       */
+/*   Updated: 2025/11/27 23:00:47 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,10 @@
 #include "Mode.hpp"
 #include "Topic.hpp"
 
-Channel::Channel(const std::string &name) : 
-	_name(name), 
-	_mode(new Mode()),
+Channel::Channel(const std::string &name) : _name(name), _mode(new Mode()),
 	_topic(new Topic())
-{}
+{
+}
 
 Channel::Channel(const Channel &copy)
 {
@@ -28,13 +27,16 @@ Channel::Channel(const Channel &copy)
 
 Channel &Channel::operator=(const Channel &copy)
 {
+	delete	_mode;
+	delete	_topic;
+
 	if (this != &copy)
 	{
 		_name = copy._name;
 		_members = copy._members;
-		if (_mode) delete _mode;
-		if (_topic) delete _topic;
-		_mode = new Mode(*copy._mode);
+		if (_mode)
+			if (_topic)
+				_mode = new Mode(*copy._mode);
 		_topic = new Topic(*copy._topic);
 	}
 	return (*this);
@@ -57,24 +59,17 @@ const std::string &Channel::getName() const
 
 void Channel::addMember(Client *client)
 {
-	_members.push_back(client);
+	_members.insert(client);
 }
 
 void Channel::removeMember(Client *client)
 {
-	for (std::vector<Client *>::iterator it = _members.begin(); it != _members.end(); ++it)
-	{
-		if (*it == client)
-		{
-			_members.erase(it);
-			break ;
-		}
-	}
+	_members.erase(client);
 }
 
 void Channel::broadcast(const std::string &message)
 {
-	for (std::vector<Client *>::iterator it = _members.begin(); it != _members.end(); ++it)
+	for (std::set<Client *>::iterator it = _members.begin(); it != _members.end(); ++it)
 		(*it)->sendMessage(message);
 }
 
@@ -83,16 +78,9 @@ Topic &Channel::getTopic()
 	return (*_topic);
 }
 
-// void Channel::broadcastTopicChanged(const Client &client)
-// {
-// 	std::string msg = ":" + client.getNickname() + " TOPIC " + _name + " :"
-// 		+ _topic.getTopic() + "\r\n";
-// 	broadcast(msg);
-// }
-
 bool Channel::isOperator(const Client &client) const
 {
-	for (std::vector<Client *>::const_iterator it = _operators.begin(); it != _operators.end(); ++it)
+	for (std::set<Client *>::const_iterator it = _operators.begin(); it != _operators.end(); ++it)
 	{
 		if ((*it)->getNickname() == client.getNickname())
 			return (true);
@@ -102,32 +90,44 @@ bool Channel::isOperator(const Client &client) const
 
 void Channel::addOperator(Client *client)
 {
-	if (!isOperator(*client))
-		_operators.push_back(client);
+	_operators.insert(client);
 }
 
 void Channel::removeOperator(Client *client)
 {
-	for (std::vector<Client *>::iterator it = _operators.begin(); it != _operators.end(); ++it)
-	{
-		if ((*it)->getNickname() == client->getNickname())
-		{
-			it = _operators.erase(it);
-			return ;
-		}
-	}
+	_operators.erase(client);
 }
 bool Channel::isMember(const Client &client) const
 {
-	for (size_t i = 0; i < _members.size(); i++)
-	{
-		if (_members[i] == &client)
-			return true;
-	}
-	return false;
+	return (_members.count(const_cast<Client *>(&client)) > 0);
 }
 
 Mode &Channel::getMode()
 {
 	return (*_mode);
+}
+
+bool Channel::isInvited(const Client &client) const
+{
+	return (_invited.count(const_cast<Client *>(&client)) > 0);
+}
+
+bool Channel::addInvitation(Client *client)
+{
+	_invited.insert(client);
+}
+
+void Channel::removeInvitation(Client *client)
+{
+	_invited.erase(client);
+}
+
+size_t Channel::getMemberCount() const
+{
+	return (_members.size());
+}
+
+const std::set<Client *> &Channel::getMembers() const
+{
+	return (_members);
 }

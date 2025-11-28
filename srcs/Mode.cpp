@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 12:33:19 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/11/12 10:58:26 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/11/27 23:39:21 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,11 @@ bool Mode::isTopicLocked() const
 bool Mode::checkKey(const std::string &key) const
 {
 	return (_hasKey && _key == key);
+}
+
+bool Mode::hasKey() const
+{
+	return (_hasKey);
 }
 
 bool Mode::hasLimit() const
@@ -91,75 +96,6 @@ void Mode::clearLimit()
 	_hasLimit = false;
 	_limit = 0;
 }
-
-// void Mode::apply(const std::string &flags, Client *client)
-// {
-// 	bool	adding;
-// 	char	c;
-// 	size_t	nextSpace;
-
-// 	adding = true;
-// 	for (size_t i = 0; i < flags.size(); ++i)
-// 	{
-// 		c = flags[i];
-// 		if (c == '+')
-// 		{
-// 			adding = true;
-// 			continue ;
-// 		}
-// 		if (c == '-')
-// 		{
-// 			adding = false;
-// 			continue ;
-// 		}
-// 		switch (c)
-// 		{
-// 		case 'i':
-// 			setInvinteOnly(adding);
-// 			break ;
-// 		case 't':
-// 			setTopicLocked(adding);
-// 			break ;
-// 		case 'k':
-// 		{
-// 			nextSpace = flags.find(' ', i + 1);
-// 			std::string key;
-// 			if (nextSpace != std::string::npos)
-// 				key = flags.substr(i + 1, nextSpace - i - 1);
-// 			else
-// 				key = flags.substr(i + 1);
-// 			if (adding)
-// 				setKey(key);
-// 			else
-// 				setKey("");
-// 			i += key.size();
-// 			break ;
-// 		}
-// 		case 'l':
-// 		{
-// 			std::string limitStr;
-// 			nextSpace = flags.find(' ', i + 1);
-// 			if (nextSpace != std::string::npos)
-// 				limitStr = flags.substr(i + 1, nextSpace - i - 1);
-// 			else
-// 				limitStr = flags.substr(i + 1);
-// 			if (adding)
-// 				setLimit(atoi(limitStr.c_str()));
-// 			else
-// 				setLimit(0);
-// 			i += limitStr.size();
-// 			break ;
-// 		}
-// 		case 'o':
-// 		{
-// 			break ;
-// 		}
-// 		default:
-// 			if (client)
-// 				client->sendMessage(ERR_UNKNOWNMODE);
-// 		}
-// 	}
-// }
 
 std::string Mode::getModeString() const
 {
