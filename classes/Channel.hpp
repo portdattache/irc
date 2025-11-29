@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 20:33:13 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/11/27 22:59:05 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/11/28 22:07:43 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ class Channel
 	bool isOperator(const Client &client) const;
 	bool isMember(const Client &client) const;
 	bool isInvited(const Client &client) const;
-	bool addInvitation(Client *client);
+	void addInvitation(Client *client);
 	void removeInvitation(Client *client);
 	size_t getMemberCount() const;
 	Topic &getTopic();

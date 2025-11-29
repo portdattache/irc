@@ -3,27 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 20:20:23 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/11/20 21:03:47 by broboeuf         ###   ########.fr       */
+/*   Updated: 2025/11/28 22:59:19 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Server.hpp"
 #include "Channel.hpp"
 #include "Client.hpp"
-#include "ft_irc.hpp"
+#include "Server.hpp"
 #include "Utils.hpp"
+#include "ft_irc.hpp"
 
-Server::Server(int port, const std::string &password) : 
-	_port(port),
+Server::Server(int port, const std::string &password) : _port(port),
 	_password(password)
 {
 	int			opt;
 	sockaddr_in	addr;
-	_name = "ircserv";
 
+	_name = "ircserv";
 	_serverFd = socket(AF_INET, SOCK_STREAM, 0);
 	if (_serverFd < 0)
 		throw std::runtime_error("Socket failed");
@@ -199,9 +198,19 @@ Channel *Server::createChannel(const std::string &name)
 	_channels[name] = newChannel;
 	return (newChannel);
 }
-const std::map<std::string, Channel*>& Server::getChannels() const
+const std::map<std::string, Channel *> &Server::getChannels() const
 {
-    return _channels;
+	return (_channels);
+}
+
+void Server::removeChannel(const std::string &name)
+{
+	std::map<std::string, Channel *>::iterator it = _channels.find(name);
+	if (it != _channels.end())
+	{
+		delete (it->second);
+		_channels.erase(it);
+	}
 }
 
 // =================== MESSAGES* =============================
@@ -218,22 +227,23 @@ void Server::handleClientMessage(int clientFd, const std::string &message)
 
 const std::string &Server::getPassword() const
 {
-    return (_password);
+	return (_password);
 }
 
 void Server::tryRegister(Client &client)
 {
 	if (client.isRegistered())
-		return;
+		return ;
 	if (!client.isPassOk())
-		return;
+		return ;
 	if (!client.hasNickname())
-		return;
+		return ;
 	if (client.getUsername().empty())
-		return;
+		return ;
 
 	client.setRegistered(true);
-	sendReply(*this, client, RPL_WELCOME, "", "Welcome to IRC " + client.toString());
+	sendReply(*this, client, RPL_WELCOME, "", "Welcome to IRC "
+		+ client.toString());
 	sendReply(*this, client, RPL_YOURHOST, "", "Your host is " + getName());
 	sendReply(*this, client, RPL_CREATED, "", "This serwas created just now");
 	sendReply(*this, client, RPL_MYINFO, getName() + " ft_irc i t k o l", "");

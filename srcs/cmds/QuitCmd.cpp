@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 15:39:39 by broboeuf          #+#    #+#             */
-/*   Updated: 2025/11/27 19:43:57 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/11/29 00:54:50 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,11 @@ void QuitCmd::execute(Server &server, Client &client,
 	{
 		chan = it->second;
 		if (chan->isMember(client))
+		{
 			chan->broadcast(full);
+			chan->removeMember(&client);
+			chan->removeOperator(&client);
+		}
 	}
 	server.removeClient(client.getFd());
 }

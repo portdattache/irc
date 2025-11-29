@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/11 08:36:51 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/11/27 23:40:34 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/11/28 22:17:43 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void JoinCmd::execute(Server &server, Client &client,
 {
 	Channel	*chan;
 	bool	isNewChannel;
+	Client	*c;
 
 	// Verifie si le client est enregistrer
 	if (!client.isRegistered())
@@ -77,12 +78,16 @@ void JoinCmd::execute(Server &server, Client &client,
 		sendReply(server, client, RPL_NOTOPIC, chanName, "No topic is set");
 	// Envoyer la liste des membres
 	std::string names;
-	for (Client *c : chan->getMembers())
+	std::set<Client *> members = chan->getMembers();
+	std::set<Client *>::iterator it = members.begin();
+	while (it != members.end())
 	{
+		c = *it;
 		if (chan->isOperator(*c))
 			names += "@" + c->getNickname() + " ";
 		else
 			names += c->getNickname() + " ";
+		++it;
 	}
 	sendReply(server, client, RPL_NAMREPLY, "= " + chanName, names);
 	sendReply(server, client, RPL_ENDOFNAMES, chanName, "End of NAMES list");

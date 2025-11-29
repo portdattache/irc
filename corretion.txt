@@ -48,10 +48,10 @@ Remplacer chan->isMember(client.getFd()) par chan->isMember(client)
 Corriger le format dans le broadcast :
 ajouter un espace → PART #channel
 
-Après le retrait du membre :
-
-        Supprimer le channel s’il devient vide
-
+# Après le retrait du membre :
+#
+#        Supprimer le channel s’il devient vide
+#
 4. QUIT — Nettoyer correctement
 
 Lors de QUIT, retirer le client de tous les channels

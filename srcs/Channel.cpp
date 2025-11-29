@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 21:51:12 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/11/27 23:00:47 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/11/28 22:07:29 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ bool Channel::isInvited(const Client &client) const
 	return (_invited.count(const_cast<Client *>(&client)) > 0);
 }
 
-bool Channel::addInvitation(Client *client)
+void Channel::addInvitation(Client *client)
 {
 	_invited.insert(client);
 }

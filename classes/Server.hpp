@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 19:19:01 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/11/20 18:49:22 by broboeuf         ###   ########.fr       */
+/*   Updated: 2025/11/28 22:54:14 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ class Server
 	// === CHANNEL GESTION ==== //
 	Channel *getChannel(const std::string &name);
 	Channel *createChannel(const std::string &name);
-	const std::map<std::string, Channel*>& getChannels() const;
+	void removeChannel(const std::string &name);
+	const std::map<std::string, Channel *> &getChannels() const;
 
 	// === MESSAGES GESTION === //
 	void handleClientMessage(int clientFd, const std::string &message);
@@ -62,4 +63,3 @@ class Server
 };
 
 #endif
-
