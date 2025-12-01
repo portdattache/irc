@@ -6,7 +6,7 @@
 /*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 14:54:35 by broboeuf          #+#    #+#             */
-/*   Updated: 2025/11/28 23:04:16 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/12/01 16:59:29 by bcaumont         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,9 @@ void PartCmd::execute(Server &server, Client &client,
 		return (sendError(server, client, ERR_NOSUCHCHANNEL, channelName, ""));
 	if (!chan->isMember(client))
 		return (sendError(server, client, ERR_NOTONCHANNEL, channelName, ""));
-	// Broadcast announcement
+	// Broadcast announcement + espace manquant sur le PART #Channel
 	std::string msg = ":" + client.getNickname() + "!" + client.getUsername()
-		+ "@localhost PART" + channelName + "\r\n";
+		+ "@localhost PART " + channelName + "\r\n";
 	chan->broadcast(msg);
 	// On supprime le client du channel et de la liste d'operator si il l'est
 	chan->removeMember(&client);
