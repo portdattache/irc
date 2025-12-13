@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 20:30:18 by bcaumont          #+#    #+#             */
-/*   Updated: 2025/11/27 20:29:11 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/12/13 08:29:19 by broboeuf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,16 +114,21 @@ std::string Client::toString() const
 
 std::string Client::extractCommand()
 {
-	size_t	pos;
-
-	pos = _buffer.find("\r\n");
+	size_t pos = _buffer.find('\n');
 	std::string cmd;
+
 	if (pos == std::string::npos)
 		return ("");
+
 	cmd = _buffer.substr(0, pos);
-	_buffer.erase(0, pos + 2);
+
+	if (!cmd.empty() && cmd[cmd.size() - 1] == '\r')
+		cmd.erase(cmd.size() - 1);
+
+	_buffer.erase(0, pos + 1);
 	return (cmd);
 }
+
 
 void Client::sendMessage(const std::string &msg)
 {

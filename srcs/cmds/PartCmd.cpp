@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PartCmd.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bcaumont <bcaumont@student.42.fr>          +#+  +:+       +#+        */
+/*   By: broboeuf <broboeuf@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 14:54:35 by broboeuf          #+#    #+#             */
-/*   Updated: 2025/12/01 16:59:29 by bcaumont         ###   ########.fr       */
+/*   Updated: 2025/12/13 08:29:23 by broboeuf         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void PartCmd::execute(Server &server, Client &client,
 		return (sendError(server, client, ERR_NOTONCHANNEL, channelName, ""));
 	// Broadcast announcement + espace manquant sur le PART #Channel
 	std::string msg = ":" + client.getNickname() + "!" + client.getUsername()
-		+ "@localhost PART " + channelName + "\r\n";
+		+ "@localhost PART " + channelName;
 	chan->broadcast(msg);
 	// On supprime le client du channel et de la liste d'operator si il l'est
 	chan->removeMember(&client);
