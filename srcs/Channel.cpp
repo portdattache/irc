@@ -64,8 +64,11 @@ void Channel::addMember(Client *client)
 
 void Channel::removeMember(Client *client)
 {
-	_members.erase(client);
+    _members.erase(client);
+    if (client)
+        _operators.erase(client->getFd());
 }
+
 
 void Channel::broadcast(const std::string &message)
 {
@@ -80,23 +83,19 @@ Topic &Channel::getTopic()
 
 bool Channel::isOperator(const Client &client) const
 {
-	for (std::set<Client *>::const_iterator it = _operators.begin(); it != _operators.end(); ++it)
-	{
-		if ((*it)->getNickname() == client.getNickname())
-			return (true);
-	}
-	return (false);
+    return (_operators.count(client.getFd()) > 0);
 }
 
 void Channel::addOperator(Client *client)
 {
-	_operators.insert(client);
+    _operators.insert(client->getFd());
 }
 
 void Channel::removeOperator(Client *client)
 {
-	_operators.erase(client);
+    _operators.erase(client->getFd());
 }
+
 bool Channel::isMember(const Client &client) const
 {
 	return (_members.count(const_cast<Client *>(&client)) > 0);

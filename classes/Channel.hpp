@@ -25,7 +25,7 @@ class Channel
 	std::string _name;
 	std::string _key;
 	std::set<Client *> _members;
-	std::set<Client *> _operators;
+	std::set<int> _operators;
 	std::set<Client *> _invited;
 	Mode *_mode;
 	Topic *_topic;

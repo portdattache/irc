@@ -51,4 +51,5 @@ void KickCmd::execute(Server &server, Client &client,
 
     chan->broadcast(msg);
     chan->removeMember(victim);
+    chan->removeOperator(victim);
 }
